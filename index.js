@@ -32,14 +32,12 @@ const generateId = () => {
 };
 
 const getCurrentTime = () => {
-    return currentDate = new Date();
-    
-}
+  return (currentDate = new Date());
+};
 
 const getPeopleAmount = () => {
-    return persons.length;
-}
-
+  return persons.length;
+};
 
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
@@ -82,7 +80,6 @@ app.post("/api/persons", (req, res) => {
     number: body.number,
     id: generateId(),
   };
-
   persons = persons.concat(person);
 
   res.json(person);
