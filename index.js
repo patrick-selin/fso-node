@@ -31,12 +31,30 @@ const generateId = () => {
   return maxId + 1;
 };
 
+const getCurrentTime = () => {
+    return currentDate = new Date();
+    
+}
+
+const getPeopleAmount = () => {
+    return persons.length;
+}
+
+
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
 });
 
 app.get("/api/persons", (req, res) => {
   res.json(persons);
+});
+
+app.get("/info", (req, res) => {
+
+  res.send(`
+  <p>Phonebook has info for ${getPeopleAmount()} people</p>
+  <p>${getCurrentTime()}</p>
+  `);
 });
 
 app.get("/api/persons/:id", (req, res) => {
