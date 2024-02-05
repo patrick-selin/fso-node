@@ -27,8 +27,9 @@ let persons = [
 ];
 
 const generateId = () => {
-  const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
-  return maxId + 1;
+  const randomInteger = Math.floor(Math.random() * Math.pow(10, 15));
+
+  return randomInteger;
 };
 
 const getCurrentTime = () => {
@@ -68,17 +69,18 @@ app.get("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
+  console.log(req.body);
 
-  if (!body.content) {
+  if (!body.name ) {
     return res.status(400).json({
-      error: "content missing",
+      error: "name missing",
     });
   }
 
-  const person = {
+  const person = {  
+    id: generateId(),
     name: body.name,
     number: body.number,
-    id: generateId(),
   };
   persons = persons.concat(person);
 
