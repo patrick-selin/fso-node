@@ -11,3 +11,10 @@ content-type: application/json
     "name": "Arto Hellas",
     "number": "040-0400404"
 }
+
+
+###
+GET https://phonebook-api12412.fly.dev
+###
+GET https://phonebook-api12412.fly.dev/api/persons
+###
