@@ -2,8 +2,12 @@ const express = require("express");
 const app = express();
 const morgan = require('morgan')
 
+morgan.token('type', (req, res) => JSON.stringify(req.body));
+// app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :type'));
+
 app.use(express.json());
-app.use(morgan('tiny'))
+
 
 let persons = [
   {
@@ -75,7 +79,6 @@ app.get("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
-  console.log(req.body);
 
   if (nameExists(body.name)) {
     return res.status(400).json({
