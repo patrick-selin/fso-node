@@ -12,9 +12,15 @@ content-type: application/json
     "number": "040-0400404"
 }
 
-
 ###
 GET https://phonebook-api12412.fly.dev
 ###
 GET https://phonebook-api12412.fly.dev/api/persons
 ###
+POST https://phonebook-api12412.fly.dev/api/persons HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Jukka Poika",
+    "number": "85856554"
+}
