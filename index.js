@@ -40,6 +40,10 @@ const getPeopleAmount = () => {
   return persons.length;
 };
 
+const nameExists = (name) => {
+  return persons.find((person) => person.name === name);
+};
+
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
 });
@@ -71,13 +75,25 @@ app.post("/api/persons", (req, res) => {
   const body = req.body;
   console.log(req.body);
 
-  if (!body.name ) {
+  if (nameExists(body.name)) {
+    return res.status(400).json({
+      error: "name must be unique",
+    });
+  }
+
+  if (!body.name) {
     return res.status(400).json({
       error: "name missing",
     });
   }
 
-  const person = {  
+  if (!body.number) {
+    return res.status(400).json({
+      error: "number is missing",
+    });
+  }
+
+  const person = {
     id: generateId(),
     name: body.name,
     number: body.number,
