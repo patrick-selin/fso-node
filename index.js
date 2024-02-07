@@ -1,9 +1,9 @@
-require('dotenv').config()
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
-const Person = require('./models/person')
+const Person = require("./models/person");
 
 morgan.token("type", (req, res) => JSON.stringify(req.body));
 
@@ -30,6 +30,7 @@ const getPeopleAmount = () => {
 };
 
 const nameExists = (name) => {
+  // change to check if in db, not persons object
   return persons.find((person) => person.name === name);
 };
 
@@ -52,25 +53,32 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => person.id === id);
+  // const person = persons.find((person) => person.id === id);
 
-  if (person) {
+  // Person.findById(id).then(person => {
+  //   if (person) {
+  //     res.json(person)
+  //   } else {
+  //     res.statusMessage = "didn't find person";
+  //     res.status(404).end();
+  //   }
+  // })
+
+  Person.findById(req.params.id).then((person) => {
     res.json(person);
-  } else {
-    res.statusMessage = "Current password does not match";
-    res.status(404).end();
-  }
+  });
 });
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
 
-  if (nameExists(body.name)) {
-    return res.status(400).json({
-      error: "name must be unique",
-    });
-  }
+  // check if name exist in db, now
+  // if (nameExists(body.name)
+  // if (nameExists(body.name)) {
+  //   return res.status(400).json({
+  //     error: "name must be unique",
+  //   });
+  // }
 
   if (!body.name) {
     return res.status(400).json({
@@ -84,14 +92,17 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  const person = {
+  const person = new Person({
     id: generateId(),
     name: body.name,
-    number: body.number,
-  };
-  persons = persons.concat(person);
+    number: body.number || false,
+  });
 
-  res.json(person);
+  person.save().then((savedPerson) => {
+    res.json(savedPerson);
+  });
+
+  // res.json(person);
 });
 
 app.delete("/api/persons/:id", (req, res) => {
@@ -100,7 +111,7 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(204).end();
 });
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
