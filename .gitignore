@@ -1,1 +1,4 @@
 .env
+.dockerignore
+.toml
+.yml
