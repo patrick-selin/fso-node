@@ -14,18 +14,22 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :type")
 );
 
+const getCurrentTime = () => {
+  return (currentDate = new Date());
+};
+
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
 });
 
-app.get("/info", (req, res) => {
-  res
-    .send(
-      `
-    <p>Phonebook has info for ${getPeopleAmount()} people</p>
+app.get("/info", (req, res, next) => {
+  Person.countDocuments({})
+    .then((count) => {
+      res.send(`
+    <p>Phonebook has info for ${count} people</p>
     <p>${getCurrentTime()}</p>
-  `
-    )
+  `);
+    })
     .catch((error) => next(error));
 });
 
