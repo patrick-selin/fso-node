@@ -14,9 +14,15 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :type")
 );
 
-
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
+});
+
+app.get("/info", (req, res) => {
+  res.send(`
+    <p>Phonebook has info for ${getPeopleAmount()} people</p>
+    <p>${getCurrentTime()}</p>
+  `);
 });
 
 app.get("/api/persons", (req, res, next) => {
@@ -25,13 +31,6 @@ app.get("/api/persons", (req, res, next) => {
       res.json(persons);
     })
     .catch(next);
-});
-
-app.get("/info", (req, res) => {
-  res.send(`
-    <p>Phonebook has info for ${getPeopleAmount()} people</p>
-    <p>${getCurrentTime()}</p>
-  `);
 });
 
 app.get("/api/persons/:id", (req, res, next) => {
@@ -62,7 +61,6 @@ app.post("/api/persons", (req, res, next) => {
   }
 
   const person = new Person({
-    id: generateId(),
     name: body.name,
     number: body.number || false,
   });
@@ -76,9 +74,17 @@ app.post("/api/persons", (req, res, next) => {
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  res.status(204).end();
+  const id = req.params.id;
+
+  Person.findByIdAndDelete(id)
+    .then((result) => {
+      if (result) {
+        res.status(204).end();
+      } else {
+        res.status(404).json({ error: "Person not found" });
+      }
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (req, res) => {
@@ -93,7 +99,7 @@ const errorHandler = (error, req, res, next) => {
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
   } else if (error.name === "Validaton Error") {
-    return res.status(400).json({ error: error.message});
+    return res.status(400).json({ error: error.message });
   }
 
   next(error);
