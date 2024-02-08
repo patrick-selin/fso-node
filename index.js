@@ -14,6 +14,7 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :type")
 );
 
+
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
 });
@@ -22,7 +23,8 @@ app.get("/info", (req, res) => {
   res.send(`
     <p>Phonebook has info for ${getPeopleAmount()} people</p>
     <p>${getCurrentTime()}</p>
-  `);
+  `)
+  .catch((error) => next(error));
 });
 
 app.get("/api/persons", (req, res, next) => {
@@ -42,7 +44,7 @@ app.get("/api/persons/:id", (req, res, next) => {
         res.status(404).end();
       }
     })
-    .catch(next);
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (req, res, next) => {
@@ -70,7 +72,7 @@ app.post("/api/persons", (req, res, next) => {
     .then((savedPerson) => {
       res.json(savedPerson);
     })
-    .catch(next);
+    .catch((error) => next(error));
 });
 
 app.delete("/api/persons/:id", (req, res) => {
