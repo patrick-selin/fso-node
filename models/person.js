@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-// const password = "l10cCAO1uaCPqD9g";
-// const url = `mongodb+srv://fso2024:${password}@cluster0.a0iujyf.mongodb.net/phonebook?retryWrites=true&w=majority`;
 const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)

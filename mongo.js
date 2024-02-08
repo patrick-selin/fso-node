@@ -7,7 +7,7 @@
 
 // const password = process.argv[2];
 
-// const url = `mongodb+srv://fso2024:${password}@cluster0.a0iujyf.mongodb.net/phonebook?retryWrites=true&w=majority`;
+// const url = ``;
 
 // mongoose.set("strictQuery", false);
 // mongoose.connect(url);
