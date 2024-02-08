@@ -14,17 +14,19 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :type")
 );
 
-
 app.get("/", (req, res) => {
   res.send("<h1>Heello world</h1>");
 });
 
 app.get("/info", (req, res) => {
-  res.send(`
+  res
+    .send(
+      `
     <p>Phonebook has info for ${getPeopleAmount()} people</p>
     <p>${getCurrentTime()}</p>
-  `)
-  .catch((error) => next(error));
+  `
+    )
+    .catch((error) => next(error));
 });
 
 app.get("/api/persons", (req, res, next) => {
@@ -75,7 +77,29 @@ app.post("/api/persons", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (req, res) => {
+app.put("/api/persons/:id", (req, res, next) => {
+  const id = req.params.id;
+  const { name, number } = req.body;
+
+  const person = {
+    name: name,
+    number: number,
+  };
+
+  console.log(person);
+
+  Person.findByIdAndUpdate(id, person, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
+    .then((updatedPerson) => {
+      res.json(updatedPerson);
+    })
+    .catch((error) => next(error));
+});
+
+app.delete("/api/persons/:id", (req, res, next) => {
   const id = req.params.id;
 
   Person.findByIdAndDelete(id)
