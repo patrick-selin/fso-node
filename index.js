@@ -5,7 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const Person = require("./models/person");
 
-morgan.token("type", (req, res) => JSON.stringify(req.body));
+morgan.token("type", (req) => JSON.stringify(req.body));
 
 app.use(express.static("dist"));
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(
 );
 
 const getCurrentTime = () => {
-  return (currentDate = new Date());
+  return new Date();
 };
 
 app.get("/", (req, res) => {
