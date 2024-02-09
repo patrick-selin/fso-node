@@ -2,3 +2,7 @@
 .dockerignore
 .toml
 .yml
+
+*.env
+*.toml
+*.yml
