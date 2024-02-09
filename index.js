@@ -54,7 +54,7 @@ app.get("/api/persons/:id", (req, res, next) => {
 });
 
 app.post("/api/persons", (req, res, next) => {
-  // this
+  // think
   const body = req.body;
 
   if (!body.name) {
@@ -129,7 +129,8 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
-  } else if (error.name === "Validaton Error") {
+  } else if (error.name === "ValidationError") {
+    console.log(`tuleeko tanne ${error.message} `);
     return res.status(400).json({ error: error.message });
   }
 
